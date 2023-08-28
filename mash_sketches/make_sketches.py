@@ -37,10 +37,9 @@ if __name__ == '__main__':
         f = open(mash_readable_sketch_filename, 'r')
         sketch_data = json.load(f)['sketches'][0]['hashes']
         f.close()
-        filename_to_sketch['filename'] = sketch_data
+        filename_to_sketch[filename] = sketch_data
 
     # these sketches are all 0-1 (no abundance info is kept by mash)
     for filename1 in file_list:
         for filename2 in file_list:
             print(filename1, filename2, compute_cosine_similarity( filename_to_sketch[filename1], filename_to_sketch[filename2] ))
-            
