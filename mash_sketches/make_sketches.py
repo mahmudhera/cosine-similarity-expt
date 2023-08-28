@@ -18,8 +18,15 @@ filename_order = ['GCF_000163235.1_ASM16323v1_genomic.fna','GCF_000164555.1_ASM1
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Create mash sketches from a list of fna.gz files.")
     parser.add_argument('--genome_dir', '-g', type=str, help="Directory where the genomes are")
+    parser.add_argument('--ksize', '-k', type=int, help="k-mer size")
+    parser.add_argument('--seed', '-s', type=int, help="seed to compute sketxhes")
+    parser.add_argument('--output_filename', '-o', type=str, help="output filename, where the matrix will be written")
     args = parser.parse_args()
+
     genomes_directory = args.genome_dir
+    ksize = args.ksize
+    seed = args.seed
+    output_filename = args.output_filename
 
     file_list = os.listdir(genomes_directory)
     filename_to_sketch = {}
@@ -28,7 +35,7 @@ if __name__ == '__main__':
         mash_sketch_filename = filename+'.msh'
         mash_readable_sketch_filename = mash_sketch_filename+'.json'
 
-        cmd = f'mash sketch -k 21 {complete_file_path} -o {mash_sketch_filename}'
+        cmd = f'mash sketch -k {ksize} {complete_file_path} -o {mash_sketch_filename} -S {seed}'
         subprocess.call(cmd.split(' '))
 
         cmd = f'mash info {mash_sketch_filename} -d'
@@ -42,7 +49,8 @@ if __name__ == '__main__':
         filename_to_sketch[filename] = sketch_data
 
     # these sketches are all 0-1 (no abundance info is kept by mash)
-    print(','.join(filename_order))
+    f_out = open(output_filename, 'w')
+    f_out.write(','.join(filename_order)+'\n')
     for filename1 in filename_order:
         cosine_similarities = []
         for filename2 in filename_order:
@@ -50,4 +58,4 @@ if __name__ == '__main__':
             sketch2 = filename_to_sketch[filename2+'.gz']
             cosine_sim = compute_cosine_similarity(sketch1, sketch2)
             cosine_similarities.append(cosine_sim)
-        print(','.join( [str(cos_sim) for cos_sim in cosine_similarities] ))
+        f_out.write(','.join( [str(cos_sim) for cos_sim in cosine_similarities] ) + '\n')
