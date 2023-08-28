@@ -8,7 +8,7 @@ def compute_cosine_similarity(mash_sketch1, mash_sketch2):
     # cos theta = |A.B| / ( |A|.|B| )
     # |A.B| = number of commons in A and B
     # |A| and |B| are: sqrt( len(A, or B) )
-    num_common = set(mash_sketch1).intersect(set(mash_sketch2))
+    num_common = set(mash_sketch1).intersection(set(mash_sketch2))
     len1 = (len(mash_sketch1))**(0.5)
     len2 = (len(mash_sketch2))**(0.5)
     return num_common/(len1*len2)
