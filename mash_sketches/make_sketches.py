@@ -46,8 +46,8 @@ if __name__ == '__main__':
     for filename1 in filename_order:
         cosine_similarities = []
         for filename2 in filename_order:
-            sketch1 = filename_to_sketch[filename1]
-            sketch2 = filename_to_sketch[filename2]
+            sketch1 = filename_to_sketch[filename1+'.gz']
+            sketch2 = filename_to_sketch[filename2+'.gz']
             cosine_sim = compute_cosine_similarity(sketch1, sketch2)
             cosine_similarities.append(cosine_sim)
         print(','.join( [str(cos_sim) for cos_sim in cosine_similarities] ))
