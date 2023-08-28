@@ -13,7 +13,11 @@ if __name__ == '__main__':
         complete_file_path = os.path.join(genomes_directory, filename)
         mash_sketch_filename = filename+'.msh'
         mash_readable_sketch_filename = mash_sketch_filename+'.json'
+
         cmd = f'mash sketch -k 21 {complete_file_path} -o {mash_sketch_filename}'
         subprocess.call(cmd.split(' '))
-        cmd = f'mash info {mash_sketch_filename} -d > {mash_readable_sketch_filename}'
-        subprocess.call(cmd.split(' '))
+
+        cmd = f'mash info {mash_sketch_filename} -d'
+        f = open(mash_readable_sketch_filename, 'w')
+        subprocess.call(cmd.split(' '), stdout=f)
+        f.close()
