@@ -1,0 +1,17 @@
+sourmash_comp_matrix1 <- read.csv("sourmash_cos_sim_mat_k_31_scaled_1.csv")
+sourmash_comp_matrix2 <- read.csv("sourmash_cos_sim_mat_k_31_scaled_1000_seed_0.csv")
+rownames(sourmash_comp_matrix1) <- colnames(sourmash_comp_matrix1)
+rownames(sourmash_comp_matrix2) <- colnames(sourmash_comp_matrix2)
+hcluster1 = hclust(dist(sourmash_comp_matrix1))
+hcluster2 = hclust(dist(sourmash_comp_matrix2))
+cluster_cut1 = cutree(hcluster1, 4)
+cluster_cut2 = cutree(hcluster2, 4)
+colors = c("purple", "blue", "sienna3", "violetred1", "olivedrab", "seagreen3")
+plot(as.phylo(hcluster1), type = "fan", tip.color = colors[cluster_cut1], edge.color = 'orangered', edge.width = 1.6)
+plot(as.phylo(hcluster2), type = "fan", tip.color = colors[cluster_cut2], edge.color = 'orangered', edge.width = 1.6)
+
+
+library("ape")
+library("Biostrings")
+library("ggplot2")
+library("ggtree")
